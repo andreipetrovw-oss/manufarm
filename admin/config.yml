@@ -1,6 +1,8 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: andreipetroww-oss/manufarm
   branch: main
+
 
 media_folder: "uploads"
 public_folder: "/uploads"
@@ -16,3 +18,4 @@ collections:
           - { label: "Главный заголовок", name: "hero_title", widget: "string" }
           - { label: "Подзаголовок", name: "hero_subtitle", widget: "string" }
           - { label: "Текст кнопки", name: "cta_text", widget: "string" }
+
