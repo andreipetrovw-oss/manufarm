@@ -1,18 +1,18 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <script>
-      if (document.location.hash) {
-        window.opener.postMessage(
-          'authorization:github:' + document.location.hash,
-          document.location.origin
-        );
-        window.close();
-      }
-    </script>
-  </head>
-  <body>
-    Authorizing…
-  </body>
+<head>
+  <meta charset="utf-8" />
+  <script>
+    if (document.location.hash) {
+      window.opener.postMessage(
+        'authorization:github:' + document.location.hash,
+        document.location.origin
+      );
+      window.close();
+    }
+  </script>
+</head>
+<body>
+  Authorizing...
+</body>
 </html>
