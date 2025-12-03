@@ -9,15 +9,17 @@ public_folder: "/uploads"
 
 collections:
   - name: home
-    label: Главная
+    label: "Главная"
     files:
       - file: "content/home.json"
         name: home_content
-        label: Настройки
+        label: "Настройки"
         fields:
-          - {label: Заголовок, name: hero_title, widget: string}
-          - {label: Подзаголовок, name: hero_subtitle, widget: string}
-          - {label: Кнопка, name: cta_text, widget: string}
+          - { label: "Заголовок", name: hero_title, widget: string }
+          - { label: "Подзаголовок", name: hero_subtitle, widget: string }
+          - { label: "Кнопка", name: cta_text, widget: string }
+
+
 
 
 
