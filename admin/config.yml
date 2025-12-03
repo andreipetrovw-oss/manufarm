@@ -2,21 +2,21 @@ backend:
   name: github
   repo: andreipetroww-oss/manufarm
   branch: main
-  auth_type: implicit
-  base_url: https://manufarm.netlify.app
-  auth_endpoint: admin/oauth.html
+  client_id: <ВOv23liUJ8xZ5K7NzGHJH>
 
 media_folder: "uploads"
 public_folder: "/uploads"
 
 collections:
-  - name: "home"
-    label: "Главная страница"
+  - name: home
+    label: Главная
     files:
       - file: "content/home.json"
-        label: "Настройки сайта"
-        name: "home_content"
+        name: home_content
+        label: Настройки
         fields:
-          - { label: "Главный заголовок", name: "hero_title", widget: "string" }
-          - { label: "Подзаголовок", name: "hero_subtitle", widget: "string" }
-          - { label: "Текст кнопки", name: "cta_text", widget: "string" }
+          - {label: Заголовок, name: hero_title, widget: string}
+          - {label: Подзаголовок, name: hero_subtitle, widget: string}
+          - {label: Кнопка, name: cta_text, widget: string}
+
+
