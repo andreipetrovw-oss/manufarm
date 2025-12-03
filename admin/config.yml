@@ -1,0 +1,18 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "home"
+    label: "Главная страница"
+    files:
+      - file: "content/home.json"
+        label: "Тексты сайта"
+        name: "home_content"
+        fields:
+          - { label: "Главный заголовок", name: "hero_title", widget: "string" }
+          - { label: "Подзаголовок", name: "hero_subtitle", widget: "string" }
+          - { label: "Текст кнопки", name: "cta_text", widget: "string" }
