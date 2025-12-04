@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manufarm - Admin Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f7fa;
+            padding: 20px;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.1);
+            padding: 40px;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e8eef3;
+        }
+
+        .admin-header h1 {
+            font-size: 32px;
+            color: #1a1a1a;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #ff6b35;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #e8eef3;
+            color: #1a1a1a;
+        }
+
+        .btn-secondary:hover {
+            background: #d4dce5;
+        }
+
+        .btn-success {
+            background: #4caf50;
+            color: white;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 5px;
+            height: 25px;
+            background: #ff6b35;
+            border-radius: 3px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 12px 15px;
+            border: 2px solid #e8eef3;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .card-group {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .card-group h4 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #ff6b35;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .preview-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #ff6b35;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .preview-link:hover {
+            text-decoration: underline;
+        }
+
+        .instruction {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .instruction h3 {
+            margin-bottom: 10px;
+            color: #856404;
+        }
+
+        .instruction p {
+            color: #856404;
+            line-height: 1.6;
+        }
+
+        .instruction code {
+            background: #fff;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>🛠️ Manufarm Admin Panel</h1>
+            <div class="admin-actions">
+                <a href="index.html" class="preview-link" target="_blank">👁️ Vaata lehte</a>
+            </div>
+        </div>
+
+        <div class="alert alert-info" id="infoAlert">
+            ℹ️ <strong>Info:</strong> Muudatused salvestatakse kohalikult teie brauseris (localStorage). GitHub/Vercel jaoks tuleb kasutada JSON faili.
+        </div>
+
+        <div class="alert alert-success" id="successAlert">
+            ✅ <strong>Salvestatud!</strong> Muudatused on edukalt salvestatud. Värskenda peamist lehte muudatuste nägemiseks.
+        </div>
+
+        <div class="instruction">
+            <h3>📝 Kuidas kasutada:</h3>
+            <p><strong>1.</strong> Muuda allpool olevaid välju<br>
+            <strong>2.</strong> Klõpsa "Salvesta kõik muudatused"<br>
+            <strong>3.</strong> Värskenda peamist lehte (index.html)<br>
+            <strong>4.</strong> GitHub jaoks: ekspordi JSON ja lisa <code>content.json</code> faili</p>
+        </div>
+
+        <form id="adminForm">
+            <!-- HEADER -->
+            <div class="section">
+                <h2 class="section-title">Header / Päis</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Logo tekst</label>
+                        <input type="text" id="logo" name="logo" value="MANUFARM">
+                    </div>
+                    <div class="form-group">
+                        <label>Nupu tekst</label>
+                        <input type="text" id="header-btn" name="header-btn" value="Võta ühendust">
+                    </div>
+                </div>
+            </div>
+
+            <!-- HERO -->
+            <div class="section">
+                <h2 class="section-title">Hero sektsion</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Pealkiri (1. osa)</label>
+                        <input type="text" id="hero-title" name="hero-title" value="Metallkonstruktsioonid">
+                    </div>
+                    <div class="form-group">
+                        <label>Pealkiri (aktsent)</label>
+                        <input type="text" id="hero-title-accent" name="hero-title-accent" value="uuel tasemel">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Alampealkiri</label>
+                        <textarea id="hero-subtitle" name="hero-subtitle">Projekteerimine, tootmine ja paigaldamine igat liiki metallkonstruktsioonidele kvaliteedigarantiiga</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Nupu tekst</label>
+                        <input type="text" id="hero-btn" name="hero-btn" value="Küsi pakkumist">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SERVICES -->
+            <div class="section">
+                <h2 class="section-title">Teenused</h2>
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label>Sektsiooni pealkiri</label>
+                        <input type="text" id="services-title" name="services-title" value="Parimad lahendused teie ettevõttele">
+                    </div>
+                </div>
+
+                <div class="card-group">
+                    <h4>Teenus 1</h4>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Ikoon (emoji)</label>
+                            <input type="text" id="service1-icon" name="service1-icon" value="🏗️">
+                        </div>
+                        <div class="form-group">
+                            <label>Pealkiri</label>
+                            <input type="text" id="service1-title" name="service1-title" value="Hoonete raamistikud">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Kirjeldus</label>
+                            <textarea id="service1-desc" name="service1-desc">Tööstus-, ärihoonete ja haldushoonete metallraamistike projekteerimine ja tootmine mis tahes keerukusastmega</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-group">
+                    <h4>Teenus 2</h4>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Ikoon (emoji)</label>
+                            <input type="text" id="service2-icon" name="service2-icon" value="🏭">
+                        </div>
+                        <div class="form-group">
+                            <label>Pealkiri</label>
+                            <input type="text" id="service2-title" name="service2-title" value="Angarid ja laod">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Kirjeldus</label>
+                            <textarea id="service2-desc" name="service2-desc">Kiirest ehitatavad metallkonstruktsioonid ladude, tootmistsoonide ja logistikakeskuste jaoks</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-group">
+                    <h4>Teenus 3</h4>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Ikoon (emoji)</label>
+                            <input type="text" id="service3-icon" name="service3-icon" value="⚙️">
+                        </div>
+                        <div class="form-group">
+                            <label>Pealkiri</label>
+                            <input type="text" id="service3-title" name="service3-title" value="Individuaalsed projektid">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Kirjeldus</label>
+                            <textarea id="service3-desc" name="service3-desc">Mittestandardsete metallkonstruktsioonide väljatöötamine ja realiseerimine teie tehniliste nõuete ja jooniste järgi</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STATISTICS -->
+            <div class="section">
+                <h2 class="section-title">Statistika</h2>
+                
+                <div class="card-group">
+                    <h4>Statistika 1</h4>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Number</label>
+                            <input type="text" id="stat1-number" name="stat1-number" value="15+">
+                        </div>
+                        <div class="form-group">
+                            <label>Pealkiri</label>
+                            <input type="text" id="stat1-title" name="stat1-title" value="Aastat kogemust">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Kirjeldus</label>
+                            <input type="text" id="stat1-desc" name="stat1-desc" value="Metallkonstruktsioonide turul">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-group">
+                    <h4>Statistika 2</h4>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Number</label>
+                            <input type="text" id="stat2-number" name="stat2-number" value="500+">
+                        </div>
+                        <div class="form-group">
+                            <label>Pealkiri</label>
+                            <input type="text" id="stat2-title" name="stat2-title" value="Projektid">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Kirjeldus</label>
+                            <input type="text" id="stat2-desc" name="stat2-desc" value="Edukalt lõpetatud">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-group">
+                    <h4>Statistika 3</h4>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Number</label>
+                            <input type="text" id="stat3-number" name="stat3-number" value="100%">
+                        </div>
+                        <div class="form-group">
+                            <label>Pealkiri</label>
+                            <input type="text" id="stat3-title" name="stat3-title" value="Kvaliteet">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Kirjeldus</label>
+                            <input type="text" id="stat3-desc" name="stat3-desc" value="Garantii kõigile töödele">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-group">
+                    <h4>Statistika 4</h4>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Number</label>
+                            <input type="text" id="stat4-number" name="stat4-number" value="24/7">
+                        </div>
+                        <div class="form-group">
+                            <label>Pealkiri</label>
+                            <input type="text" id="stat4-title" name="stat4-title" value="Tugi">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Kirjeldus</label>
+                            <input type="text" id="stat4-desc" name="stat4-desc" value="Kliendikonsultatsioonid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TEAM -->
+            <div class="section">
+                <h2 class="section-title">Meeskond</h2>
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label>Sektsiooni pealkiri</label>
+                        <input type="text" id="team-title" name="team-title" value="Professionaalne meeskond">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Alampealkiri</label>
+                        <input type="text" id="team-subtitle" name="team-subtitle" value="Parimad insenerid ja spetsialistid">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Tekst 1</label>
+                        <textarea id="team-text1" name="team-text1">Meie meeskond koosneb kõrgelt kvalifitseeritud inseneridest, projekteerijatega ja paigaldajatega, kellel on pikaajaline töökogemus.</textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Tekst 2</label>
+                        <textarea id="team-text2" name="team-text2">Me tõstame pidevalt kvalifikatsiooni ja jälgime uusimaid tehnoloogiaid metallkonstruktsioonide vallas.</textarea>
+                    </div>
+                </div>
+
+                <div class="card-group">
+                    <h4>Omadus 1</h4>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Pealkiri</label>
+                            <input type="text" id="team-feat1-title" name="team-feat1-title" value="Esimesed regioonis">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Tekst</label>
+                            <textarea id="team-feat1-text" name="team-feat1-text">Sertifitseeritud spetsialistid rahvusvaheliste kvaliteedistandarditega</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-group">
+                    <h4>Omadus 2</h4>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Pealkiri</label>
+                            <input type="text" id="team-feat2-title" name="team-feat2-title" value="Kaasaegsed tehnoloogiad">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Tekst</label>
+                            <textarea id="team-feat2-text" name="team-feat2-text">Kasutame täiustatud projekteerimis- ja tootmismeetodeid</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-group">
+                    <h4>Omadus 3</h4>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Pealkiri</label>
+                            <input type="text" id="team-feat3-title" name="team-feat3-title" value="Individuaalne lähenemine">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Tekst</label>
+                            <textarea id="team-feat3-text" name="team-feat3-text">Iga projekt töötakse välja teie vajadusi arvestades</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EQUIPMENT -->
+            <div class="section">
+                <h2 class="section-title">Seadmed</h2>
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label>Sektsiooni pealkiri</label>
+                        <input type="text" id="equipment-title" name="equipment-title" value="Kaasaegne seadmed">
+                    </div>
+                </div>
+
+                <div class="card-group">
+                    <h4>Kaart 1</h4>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Pealkiri</label>
+                            <input type="text" id="equip1-title" name="equip1-title" value="Parim seadmed tootmiseks">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Kirjeldus</label>
+                            <textarea id="equip1-desc" name="equip1-desc">Kõik seadmed uuendatakse regulaarselt ja vastavad kaasaegsetele kvaliteedistandarditele</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-group">
+                    <h4>Kaart 2</h4>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Pealkiri</label>
+                            <input type="text" id="equip2-title" name="equip2-title" value="Kvaliteedikontroll">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Kirjeldus</label>
+                            <textarea id="equip2-desc" name="equip2-desc">Mitmeastmeline kontrollisüsteem kõigil tootmise ja paigaldamise etappidel</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-group">
+                    <h4>Kaart 3</h4>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Pealkiri</label>
+                            <input type="text" id="equip3-title" name="equip3-title" value="Täielik tootmistsükkel">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Kirjeldus</label>
+                            <textarea id="equip3-desc" name="equip3-desc">Projekteerimisest kuni paigaldamiseni - kõik teeme oma võimsustel</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTACT -->
+            <div class="section">
+                <h2 class="section-title">Kontakt</h2>
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label>Sektsiooni pealkiri</label>
+                        <input type="text" id="contact-title" name="contact-title" value="Võtke meiega ühendust">
+                    </div>
+                    <div class="form-group">
+                        <label>Telefon</label>
+                        <input type="text" id="contact-phone" name="contact-phone" value="+372 5XXX XXXX">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="contact-email" name="contact-email" value="info@manufarm.ee">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Tugitekst</label>
+                        <textarea id="contact-support" name="contact-support">Tasuta konsultatsioonid ja klienditugi. Vastame kõigile teie küsimustele ja aitame realiseerida mis tahes keerukusega projekti.</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="section">
+                <h2 class="section-title">Footer / Jalus</h2>
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label>Autoriõiguse tekst</label>
+                        <input type="text" id="footer-text" name="footer-text" value="© 2024 Manufarm. Kõik õigused kaitstud.">
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 40px;">
+                <button type="submit" class="btn btn-primary" style="padding: 15px 40px; font-size: 16px;">💾 Salvesta kõik muudatused</button>
+                <button type="button" class="btn btn-success" onclick="exportJSON()" style="padding: 15px 40px; font-size: 16px;">📥 Ekspordi JSON</button>
+                <button type="button" class="btn btn-secondary" onclick="loadDefaults()">🔄 Taasta vaikeväärtused</button>
+            </div>
+        </form>
+
+    </div>
+
+    <script>
+        // Load saved content
+        function loadContent() {
+            const saved = localStorage.getItem('manufarmContent');
+            if (saved) {
+                const content = JSON.parse(saved);
+                Object.keys(content).forEach(key => {
+                    const field = document.getElementById(key);
+                    if (field) {
+                        field.value = content[key];
+                    }
+                });
+            }
+        }
+
+        // Save content
+        document.getElementById('adminForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const content = {};
+            
+            for (let [key, value] of formData.entries()) {
+                content[key] = value;
+            }
+            
+            localStorage.setItem('manufarmContent', JSON.stringify(content));
+            
+            // Show success message
+            const alert = document.getElementById('successAlert');
+            alert.classList.add('show');
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 5000);
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Export JSON
+        function exportJSON() {
+            const formData = new FormData(document.getElementById('adminForm'));
+            const content = {};
+            
+            for (let [key, value] of formData.entries()) {
+                content[key] = value;
+            }
+            
+            const dataStr = JSON.stringify(content, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'content.json';
+            link.click();
+        }
+
+        // Load defaults
+        function loadDefaults() {
+            if (confirm('Kas olete kindel, et soovite taastada vaikeväärtused? Kõik muudatused lähevad kaotsi.')) {
+                localStorage.removeItem('manufarmContent');
+                location.reload();
+            }
+        }
+
+        // Show info alert on page load
+        window.addEventListener('load', () => {
+            loadContent();
+            const infoAlert = document.getElementById('infoAlert');
+            infoAlert.classList.add('show');
+        });
+    </script>
+
+</body>
+</html>
