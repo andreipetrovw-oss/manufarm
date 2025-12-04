@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="et">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manufarm - Металлоконструкции</title>
+    <title>Manufarm - Metallkonstruktsioonid</title>
     <style>
         * {
             margin: 0;
@@ -70,7 +70,7 @@
             box-shadow: 0 5px 20px rgba(255, 107, 53, 0.4);
         }
 
-        /* HERO SECTION */
+        /* HERO */
         .hero {
             height: 100vh;
             display: flex;
@@ -125,7 +125,7 @@
             margin-right: auto;
         }
 
-        /* FEATURES SECTION */
+        /* FEATURES */
         .features {
             padding: 120px 50px;
             background: var(--white);
@@ -175,7 +175,7 @@
             line-height: 1.8;
         }
 
-        /* STATS SECTION */
+        /* STATS */
         .stats {
             background: var(--light-gray);
             padding: 120px 50px;
@@ -214,7 +214,7 @@
             letter-spacing: 0 !important;
         }
 
-        /* TEAM SECTION */
+        /* TEAM */
         .team {
             padding: 120px 50px;
             background: var(--primary);
@@ -269,7 +269,7 @@
             line-height: 1.7;
         }
 
-        /* EQUIPMENT SECTION */
+        /* EQUIPMENT */
         .equipment {
             padding: 120px 50px;
             background: var(--white);
@@ -327,48 +327,156 @@
             opacity: 0.85;
         }
 
-        /* CONTACT SECTION */
+        /* CONTACT */
         .contact {
             padding: 120px 50px;
-            background: var(--accent);
+            background: var(--primary);
             color: var(--white);
-            text-align: center;
         }
 
         .contact .section-title {
             color: var(--white);
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .contact-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 80px;
+            align-items: start;
         }
 
         .contact-info {
-            max-width: 600px;
-            margin: 60px auto 0;
+            position: sticky;
+            top: 150px;
         }
 
         .contact-item {
-            font-size: clamp(20px, 3vw, 32px);
-            font-weight: 700;
             margin-bottom: 30px;
-            letter-spacing: -1px;
+        }
+
+        .contact-label {
+            display: block;
+            font-size: 14px;
+            opacity: 0.7;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .contact-item a {
             color: var(--white);
             text-decoration: none;
-            transition: opacity 0.3s;
+            font-size: clamp(20px, 3vw, 28px);
+            font-weight: 700;
+            transition: color 0.3s;
+            letter-spacing: -1px;
         }
 
         .contact-item a:hover {
-            opacity: 0.8;
+            color: var(--accent);
         }
 
         .support-text {
-            font-size: clamp(16px, 2vw, 20px);
-            margin-top: 50px;
-            opacity: 0.95;
+            font-size: 16px;
+            margin-top: 40px;
+            opacity: 0.85;
             line-height: 1.8;
         }
 
-        /* FOOTER */
+        .contact-form {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 50px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 15px 20px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--white);
+            transition: all 0.3s;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-group select {
+            cursor: pointer;
+        }
+
+        .form-group select option {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: var(--accent);
+            color: var(--white);
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+
         footer {
             background: var(--primary);
             color: var(--white);
@@ -381,7 +489,6 @@
             font-size: 14px;
         }
 
-        /* RESPONSIVE */
         @media (max-width: 768px) {
             header {
                 padding: 20px 30px;
@@ -399,212 +506,220 @@
             .stats-grid {
                 gap: 50px;
             }
-        }
 
-        /* ANIMATIONS */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
+            .contact-wrapper {
+                grid-template-columns: 1fr;
+                gap: 50px;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
 
-        .animate-in {
-            animation: fadeInUp 0.8s ease-out forwards;
+            .contact-info {
+                position: static;
+            }
+
+            .contact-form {
+                padding: 30px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- HEADER -->
     <header>
-        <div class="logo">MANUFARM</div>
-        <a href="#contact" class="contact-btn">Связаться</a>
+        <div class="logo" data-editable="logo">MANUFARM</div>
+        <a href="#contact" class="contact-btn" data-editable="header-btn">Võta ühendust</a>
     </header>
 
-    <!-- HERO -->
     <section class="hero">
         <div class="hero-content">
-            <h1>Металлоконструкции <span class="hero-highlight">нового уровня</span></h1>
-            <p>Проектирование, производство и монтаж металлоконструкций любой сложности с гарантией качества</p>
-            <a href="#contact" class="contact-btn">Получить консультацию</a>
+            <h1><span data-editable="hero-title">Metallkonstruktsioonid</span> <span class="hero-highlight" data-editable="hero-title-accent">uuel tasemel</span></h1>
+            <p data-editable="hero-subtitle">Projekteerimine, tootmine ja paigaldamine igat liiki metallkonstruktsioonidele kvaliteedigarantiiga</p>
+            <a href="#contact" class="contact-btn" data-editable="hero-btn">Küsi pakkumist</a>
         </div>
     </section>
 
-    <!-- FEATURES -->
     <section class="features">
-        <h2 class="section-title">Лучшие решения для вашего бизнеса</h2>
+        <h2 class="section-title" data-editable="services-title">Parimad lahendused teie ettevõttele</h2>
         <div class="features-grid">
             <div class="feature-card">
-                <span class="feature-icon">🏗️</span>
-                <h3>Каркасы зданий</h3>
-                <p>Проектирование и изготовление металлических каркасов для промышленных, коммерческих и административных зданий любой сложности</p>
+                <span class="feature-icon" data-editable="service1-icon">🏗️</span>
+                <h3 data-editable="service1-title">Hoonete raamistikud</h3>
+                <p data-editable="service1-desc">Tööstus-, ärihoonete ja haldushoonete metallraamistike projekteerimine ja tootmine mis tahes keerukusastmega</p>
             </div>
 
             <div class="feature-card">
-                <span class="feature-icon">🏭</span>
-                <h3>Ангары и склады</h3>
-                <p>Быстровозводимые металлоконструкции для складских помещений, производственных цехов и логистических комплексов</p>
+                <span class="feature-icon" data-editable="service2-icon">🏭</span>
+                <h3 data-editable="service2-title">Angarid ja laod</h3>
+                <p data-editable="service2-desc">Kiirest ehitatavad metallkonstruktsioonid ladude, tootmistsoonide ja logistikakeskuste jaoks</p>
             </div>
 
             <div class="feature-card">
-                <span class="feature-icon">⚙️</span>
-                <h3>Индивидуальные проекты</h3>
-                <p>Разработка и реализация нестандартных металлоконструкций по вашим техническим требованиям и чертежам</p>
+                <span class="feature-icon" data-editable="service3-icon">⚙️</span>
+                <h3 data-editable="service3-title">Individuaalsed projektid</h3>
+                <p data-editable="service3-desc">Mittestandardsete metallkonstruktsioonide väljatöötamine ja realiseerimine teie tehniliste nõuete ja jooniste järgi</p>
             </div>
         </div>
     </section>
 
-    <!-- STATS -->
     <section class="stats">
         <div class="stats-grid">
             <div class="stat-item">
-                <h2>15+</h2>
-                <p>Лет опыта</p>
-                <p class="stat-description">На рынке металлоконструкций</p>
+                <h2 data-editable="stat1-number">15+</h2>
+                <p data-editable="stat1-title">Aastat kogemust</p>
+                <p class="stat-description" data-editable="stat1-desc">Metallkonstruktsioonide turul</p>
             </div>
 
             <div class="stat-item">
-                <h2>500+</h2>
-                <p>Проектов</p>
-                <p class="stat-description">Успешно реализовано</p>
+                <h2 data-editable="stat2-number">500+</h2>
+                <p data-editable="stat2-title">Projektid</p>
+                <p class="stat-description" data-editable="stat2-desc">Edukalt lõpetatud</p>
             </div>
 
             <div class="stat-item">
-                <h2>100%</h2>
-                <p>Качество</p>
-                <p class="stat-description">Гарантия на все работы</p>
+                <h2 data-editable="stat3-number">100%</h2>
+                <p data-editable="stat3-title">Kvaliteet</p>
+                <p class="stat-description" data-editable="stat3-desc">Garantii kõigile töödele</p>
             </div>
 
             <div class="stat-item">
-                <h2>24/7</h2>
-                <p>Поддержка</p>
-                <p class="stat-description">Консультации клиентов</p>
+                <h2 data-editable="stat4-number">24/7</h2>
+                <p data-editable="stat4-title">Tugi</p>
+                <p class="stat-description" data-editable="stat4-desc">Kliendikonsultatsioonid</p>
             </div>
         </div>
     </section>
 
-    <!-- TEAM -->
     <section class="team">
-        <h2 class="section-title">Профессиональная команда</h2>
+        <h2 class="section-title" data-editable="team-title">Professionaalne meeskond</h2>
         <div class="team-content">
-            <h3>Лучшие инженеры и специалисты</h3>
-            <p>Наша команда состоит из высококвалифицированных инженеров, проектировщиков и монтажников с многолетним опытом работы.</p>
-            <p>Мы постоянно повышаем квалификацию и следим за новейшими технологиями в области металлоконструкций.</p>
+            <h3 data-editable="team-subtitle">Parimad insenerid ja spetsialistid</h3>
+            <p data-editable="team-text1">Meie meeskond koosneb kõrgelt kvalifitseeritud inseneridest, projekteerijatega ja paigaldajatega, kellel on pikaajaline töökogemus.</p>
+            <p data-editable="team-text2">Me tõstame pidevalt kvalifikatsiooni ja jälgime uusimaid tehnoloogiaid metallkonstruktsioonide vallas.</p>
 
             <div class="team-features">
                 <div class="team-feature">
-                    <div class="team-feature-title">Первые в регионе</div>
-                    <div class="team-feature-text">Сертифицированные специалисты с международными стандартами качества</div>
+                    <div class="team-feature-title" data-editable="team-feat1-title">Esimesed regioonis</div>
+                    <div class="team-feature-text" data-editable="team-feat1-text">Sertifitseeritud spetsialistid rahvusvaheliste kvaliteedistandarditega</div>
                 </div>
 
                 <div class="team-feature">
-                    <div class="team-feature-title">Современные технологии</div>
-                    <div class="team-feature-text">Используем передовые методы проектирования и производства</div>
+                    <div class="team-feature-title" data-editable="team-feat2-title">Kaasaegsed tehnoloogiad</div>
+                    <div class="team-feature-text" data-editable="team-feat2-text">Kasutame täiustatud projekteerimis- ja tootmismeetodeid</div>
                 </div>
 
                 <div class="team-feature">
-                    <div class="team-feature-title">Индивидуальный подход</div>
-                    <div class="team-feature-text">Каждый проект разрабатывается с учетом ваших потребностей</div>
+                    <div class="team-feature-title" data-editable="team-feat3-title">Individuaalne lähenemine</div>
+                    <div class="team-feature-text" data-editable="team-feat3-text">Iga projekt töötakse välja teie vajadusi arvestades</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- EQUIPMENT -->
     <section class="equipment">
-        <h2 class="section-title">Современное оборудование</h2>
+        <h2 class="section-title" data-editable="equipment-title">Kaasaegne seadmed</h2>
         <div class="equipment-grid">
             <div class="equipment-card">
-                <h3>Лучшее оборудование для производства</h3>
-                <p>Всё оборудование регулярно обновляется и соответствует современным стандартам качества</p>
+                <h3 data-editable="equip1-title">Parim seadmed tootmiseks</h3>
+                <p data-editable="equip1-desc">Kõik seadmed uuendatakse regulaarselt ja vastavad kaasaegsetele kvaliteedistandarditele</p>
             </div>
 
             <div class="equipment-card">
-                <h3>Контроль качества</h3>
-                <p>Многоступенчатая система контроля на всех этапах производства и монтажа</p>
+                <h3 data-editable="equip2-title">Kvaliteedikontroll</h3>
+                <p data-editable="equip2-desc">Mitmeastmeline kontrollisüsteem kõigil tootmise ja paigaldamise etappidel</p>
             </div>
 
             <div class="equipment-card">
-                <h3>Полный цикл производства</h3>
-                <p>От проектирования до монтажа — всё делаем на собственных мощностях</p>
+                <h3 data-editable="equip3-title">Täielik tootmistsükkel</h3>
+                <p data-editable="equip3-desc">Projekteerimisest kuni paigaldamiseni - kõik teeme oma võimsustel</p>
             </div>
         </div>
     </section>
 
-    <!-- CONTACT -->
     <section id="contact" class="contact">
-        <h2 class="section-title">Свяжитесь с нами</h2>
+        <h2 class="section-title" data-editable="contact-title">Võtke meiega ühendust</h2>
         
         <div class="contact-wrapper">
             <div class="contact-info">
                 <div class="contact-item">
-                    <span class="contact-label">Телефон:</span>
-                    <a href="tel:+79XXXXXXXXX">+7 (9XX) XXX-XX-XX</a>
+                    <span class="contact-label">Telefon:</span>
+                    <a href="tel:+3725XXXXXXX" data-editable="contact-phone">+372 5XXX XXXX</a>
                 </div>
                 <div class="contact-item">
                     <span class="contact-label">Email:</span>
-                    <a href="mailto:info@manufarm.ru">info@manufarm.ru</a>
+                    <a href="mailto:info@manufarm.ee" data-editable="contact-email">info@manufarm.ee</a>
                 </div>
-                <p class="support-text">Бесплатная консультация и поддержка клиентов. Ответим на все ваши вопросы и поможем реализовать проект любой сложности.</p>
+                <p class="support-text" data-editable="contact-support">Tasuta konsultatsioonid ja klienditugi. Vastame kõigile teie küsimustele ja aitame realiseerida mis tahes keerukusega projekti.</p>
             </div>
 
             <form class="contact-form" id="contactForm">
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="name">Ваше имя *</label>
-                        <input type="text" id="name" name="name" placeholder="Иван Петров" required>
+                        <label for="name">Teie nimi *</label>
+                        <input type="text" id="name" name="name" placeholder="Jaan Tamm" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="company">Компания</label>
-                        <input type="text" id="company" name="company" placeholder="ООО Ваша компания">
+                        <label for="company">Ettevõte</label>
+                        <input type="text" id="company" name="company" placeholder="OÜ Teie Ettevõte">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="phone">Телефон *</label>
-                        <input type="tel" id="phone" name="phone" placeholder="+7 (___) ___-__-__" required>
+                        <label for="phone">Telefon *</label>
+                        <input type="tel" id="phone" name="phone" placeholder="+372 XXXX XXXX" required>
                     </div>
 
                     <div class="form-group">
                         <label for="email">Email *</label>
-                        <input type="email" id="email" name="email" placeholder="email@example.com" required>
+                        <input type="email" id="email" name="email" placeholder="email@example.ee" required>
                     </div>
                 </div>
 
                 <div class="form-group full-width">
-                    <label for="service">Интересующая услуга</label>
+                    <label for="service">Huvipakkuv teenus</label>
                     <select id="service" name="service">
-                        <option value="">Выберите услугу</option>
-                        <option value="Каркасы зданий">Каркасы зданий</option>
-                        <option value="Ангары и склады">Ангары и склады</option>
-                        <option value="Индивидуальный проект">Индивидуальный проект</option>
-                        <option value="Консультация">Консультация</option>
+                        <option value="">Valige teenus</option>
+                        <option value="Hoonete raamistikud">Hoonete raamistikud</option>
+                        <option value="Angarid ja laod">Angarid ja laod</option>
+                        <option value="Individuaalne projekt">Individuaalne projekt</option>
+                        <option value="Konsultatsioon">Konsultatsioon</option>
                     </select>
                 </div>
 
                 <div class="form-group full-width">
-                    <label for="message">Расскажите о вашем проекте *</label>
-                    <textarea id="message" name="message" rows="5" placeholder="Опишите детали проекта, сроки, требования..." required></textarea>
+                    <label for="message">Kirjeldage oma projekti *</label>
+                    <textarea id="message" name="message" rows="5" placeholder="Kirjeldage projekti detaile, tähtaegu, nõudeid..." required></textarea>
                 </div>
 
-                <button type="submit" class="submit-btn">Отправить заявку</button>
+                <button type="submit" class="submit-btn">Saada päring</button>
             </form>
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer>
-        <p>&copy; 2024 Manufarm. Все права защищены.</p>
+        <p data-editable="footer-text">&copy; 2024 Manufarm. Kõik õigused kaitstud.</p>
     </footer>
 
     <script>
+        // Load content from localStorage or use defaults
+        function loadContent() {
+            const savedContent = localStorage.getItem('manufarmContent');
+            if (savedContent) {
+                const content = JSON.parse(savedContent);
+                Object.keys(content).forEach(key => {
+                    const element = document.querySelector(`[data-editable="${key}"]`);
+                    if (element) {
+                        element.textContent = content[key];
+                    }
+                });
+            }
+        }
+
         // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -632,7 +747,31 @@
 
             lastScroll = currentScroll;
         });
+
+        // Form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                company: document.getElementById('company').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                service: document.getElementById('service').value,
+                message: document.getElementById('message').value
+            };
+
+            console.log('Form data:', formData);
+            alert('Täname! Me võtame teiega peagi ühendust.');
+            this.reset();
+        });
+
+        // Load content on page load
+        loadContent();
     </script>
 
 </body>
 </html>
+</body>
+</html>
+
