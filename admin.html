@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="et">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manufarm - Admin Panel</title>
+    <title>Manufarm - Админ-панель</title>
     <style>
         * {
             margin: 0;
@@ -17,6 +17,96 @@
             padding: 20px;
         }
 
+        /* LOGIN SCREEN */
+        .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .login-box {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .login-box h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+
+        .login-box p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .login-form-group {
+            margin-bottom: 20px;
+        }
+
+        .login-form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .login-form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e8eef3;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .login-form-group input:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: #ff6b35;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .login-btn:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+        }
+
+        .login-error {
+            background: #fee;
+            color: #c33;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .login-error.show {
+            display: block;
+        }
+
         .admin-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -24,6 +114,11 @@
             border-radius: 15px;
             box-shadow: 0 5px 30px rgba(0,0,0,0.1);
             padding: 40px;
+            display: none;
+        }
+
+        .admin-container.show {
+            display: block;
         }
 
         .admin-header {
@@ -43,6 +138,23 @@
         .admin-actions {
             display: flex;
             gap: 15px;
+            align-items: center;
+        }
+
+        .logout-btn {
+            padding: 10px 20px;
+            background: #e8eef3;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .logout-btn:hover {
+            background: #d4dce5;
         }
 
         .btn {
@@ -187,7 +299,6 @@
             color: #ff6b35;
             text-decoration: none;
             font-weight: 600;
-            margin-top: 10px;
         }
 
         .preview-link:hover {
@@ -218,132 +329,170 @@
             border-radius: 3px;
             font-family: monospace;
         }
+
+        .button-preview {
+            display: inline-block;
+            padding: 8px 20px;
+            background: #e8eef3;
+            border-radius: 50px;
+            font-size: 12px;
+            margin-top: 5px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
 
-    <div class="admin-container">
+    <!-- LOGIN SCREEN -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-box">
+            <h1>🔐 Вход в систему</h1>
+            <p>Введите пароль для доступа к админ-панели</p>
+            
+            <div class="login-error" id="loginError">
+                ❌ Неверный пароль! Попробуйте ещё раз.
+            </div>
+            
+            <form id="loginForm">
+                <div class="login-form-group">
+                    <label>Пароль</label>
+                    <input type="password" id="passwordInput" placeholder="Введите пароль" autofocus>
+                </div>
+                <button type="submit" class="login-btn">Войти</button>
+            </form>
+            
+            <p style="margin-top: 20px; font-size: 12px; color: #999;">
+                💡 Стандартный пароль: <code style="background: #f0f0f0; padding: 2px 6px; border-radius: 3px;">admin123</code>
+            </p>
+        </div>
+    </div>
+
+    <!-- ADMIN PANEL -->
+    <div class="admin-container" id="adminContainer">
         <div class="admin-header">
-            <h1>🛠️ Manufarm Admin Panel</h1>
+            <h1>🛠️ Админ-панель Manufarm</h1>
             <div class="admin-actions">
-                <a href="index.html" class="preview-link" target="_blank">👁️ Vaata lehte</a>
+                <a href="index.html" class="preview-link" target="_blank">👁️ Посмотреть сайт</a>
+                <button class="logout-btn" onclick="logout()">🚪 Выйти</button>
             </div>
         </div>
 
-        <div class="alert alert-info" id="infoAlert">
-            ℹ️ <strong>Info:</strong> Muudatused salvestatakse kohalikult teie brauseris (localStorage). GitHub/Vercel jaoks tuleb kasutada JSON faili.
+        <div class="alert alert-info show">
+            ℹ️ <strong>Информация:</strong> Изменения сохраняются локально в вашем браузере. Для публикации на сайте экспортируйте JSON и загрузите в GitHub.
         </div>
 
         <div class="alert alert-success" id="successAlert">
-            ✅ <strong>Salvestatud!</strong> Muudatused on edukalt salvestatud. Värskenda peamist lehte muudatuste nägemiseks.
+            ✅ <strong>Сохранено!</strong> Изменения успешно сохранены. Обновите главную страницу чтобы увидеть изменения.
         </div>
 
         <div class="instruction">
-            <h3>📝 Kuidas kasutada:</h3>
-            <p><strong>1.</strong> Muuda allpool olevaid välju<br>
-            <strong>2.</strong> Klõpsa "Salvesta kõik muudatused"<br>
-            <strong>3.</strong> Värskenda peamist lehte (index.html)<br>
-            <strong>4.</strong> GitHub jaoks: ekspordi JSON ja lisa <code>content.json</code> faili</p>
+            <h3>📝 Как использовать:</h3>
+            <p><strong>1.</strong> Измените нужные поля ниже<br>
+            <strong>2.</strong> Нажмите "Сохранить все изменения"<br>
+            <strong>3.</strong> Обновите главную страницу (index.html)<br>
+            <strong>4.</strong> Для GitHub: экспортируйте JSON и добавьте файл <code>content.json</code></p>
         </div>
 
         <form id="adminForm">
             <!-- HEADER -->
             <div class="section">
-                <h2 class="section-title">Header / Päis</h2>
+                <h2 class="section-title">Шапка сайта (Header)</h2>
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>Logo tekst</label>
+                        <label>Текст логотипа</label>
                         <input type="text" id="logo" name="logo" value="MANUFARM">
                     </div>
                     <div class="form-group">
-                        <label>Nupu tekst</label>
+                        <label>Текст кнопки в шапке</label>
                         <input type="text" id="header-btn" name="header-btn" value="Võta ühendust">
+                        <span class="button-preview">Предпросмотр: Võta ühendust</span>
                     </div>
                 </div>
             </div>
 
             <!-- HERO -->
             <div class="section">
-                <h2 class="section-title">Hero sektsion</h2>
+                <h2 class="section-title">Главный экран (Hero)</h2>
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>Pealkiri (1. osa)</label>
+                        <label>Заголовок (первая часть)</label>
                         <input type="text" id="hero-title" name="hero-title" value="Metallkonstruktsioonid">
                     </div>
                     <div class="form-group">
-                        <label>Pealkiri (aktsent)</label>
+                        <label>Заголовок (акцент, оранжевый)</label>
                         <input type="text" id="hero-title-accent" name="hero-title-accent" value="uuel tasemel">
                     </div>
                     <div class="form-group full-width">
-                        <label>Alampealkiri</label>
+                        <label>Подзаголовок / Описание</label>
                         <textarea id="hero-subtitle" name="hero-subtitle">Projekteerimine, tootmine ja paigaldamine igat liiki metallkonstruktsioonidele kvaliteedigarantiiga</textarea>
                     </div>
                     <div class="form-group">
-                        <label>Nupu tekst</label>
+                        <label>Текст кнопки</label>
                         <input type="text" id="hero-btn" name="hero-btn" value="Küsi pakkumist">
+                        <span class="button-preview">Предпросмотр: Küsi pakkumist</span>
                     </div>
                 </div>
             </div>
 
             <!-- SERVICES -->
             <div class="section">
-                <h2 class="section-title">Teenused</h2>
+                <h2 class="section-title">Услуги / Teenused</h2>
                 <div class="form-grid">
                     <div class="form-group full-width">
-                        <label>Sektsiooni pealkiri</label>
+                        <label>Заголовок секции</label>
                         <input type="text" id="services-title" name="services-title" value="Parimad lahendused teie ettevõttele">
                     </div>
                 </div>
 
                 <div class="card-group">
-                    <h4>Teenus 1</h4>
+                    <h4>Услуга 1</h4>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Ikoon (emoji)</label>
+                            <label>Иконка (emoji или символ)</label>
                             <input type="text" id="service1-icon" name="service1-icon" value="🏗️">
                         </div>
                         <div class="form-group">
-                            <label>Pealkiri</label>
+                            <label>Название услуги</label>
                             <input type="text" id="service1-title" name="service1-title" value="Hoonete raamistikud">
                         </div>
                         <div class="form-group full-width">
-                            <label>Kirjeldus</label>
+                            <label>Описание услуги</label>
                             <textarea id="service1-desc" name="service1-desc">Tööstus-, ärihoonete ja haldushoonete metallraamistike projekteerimine ja tootmine mis tahes keerukusastmega</textarea>
                         </div>
                     </div>
                 </div>
 
                 <div class="card-group">
-                    <h4>Teenus 2</h4>
+                    <h4>Услуга 2</h4>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Ikoon (emoji)</label>
+                            <label>Иконка (emoji или символ)</label>
                             <input type="text" id="service2-icon" name="service2-icon" value="🏭">
                         </div>
                         <div class="form-group">
-                            <label>Pealkiri</label>
+                            <label>Название услуги</label>
                             <input type="text" id="service2-title" name="service2-title" value="Angarid ja laod">
                         </div>
                         <div class="form-group full-width">
-                            <label>Kirjeldus</label>
+                            <label>Описание услуги</label>
                             <textarea id="service2-desc" name="service2-desc">Kiirest ehitatavad metallkonstruktsioonid ladude, tootmistsoonide ja logistikakeskuste jaoks</textarea>
                         </div>
                     </div>
                 </div>
 
                 <div class="card-group">
-                    <h4>Teenus 3</h4>
+                    <h4>Услуга 3</h4>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Ikoon (emoji)</label>
+                            <label>Иконка (emoji или символ)</label>
                             <input type="text" id="service3-icon" name="service3-icon" value="⚙️">
                         </div>
                         <div class="form-group">
-                            <label>Pealkiri</label>
+                            <label>Название услуги</label>
                             <input type="text" id="service3-title" name="service3-title" value="Individuaalsed projektid">
                         </div>
                         <div class="form-group full-width">
-                            <label>Kirjeldus</label>
+                            <label>Описание услуги</label>
                             <textarea id="service3-desc" name="service3-desc">Mittestandardsete metallkonstruktsioonide väljatöötamine ja realiseerimine teie tehniliste nõuete ja jooniste järgi</textarea>
                         </div>
                     </div>
@@ -352,75 +501,75 @@
 
             <!-- STATISTICS -->
             <div class="section">
-                <h2 class="section-title">Statistika</h2>
+                <h2 class="section-title">Статистика</h2>
                 
                 <div class="card-group">
-                    <h4>Statistika 1</h4>
+                    <h4>Блок статистики 1</h4>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Number</label>
+                            <label>Число (большая цифра)</label>
                             <input type="text" id="stat1-number" name="stat1-number" value="15+">
                         </div>
                         <div class="form-group">
-                            <label>Pealkiri</label>
+                            <label>Заголовок</label>
                             <input type="text" id="stat1-title" name="stat1-title" value="Aastat kogemust">
                         </div>
                         <div class="form-group full-width">
-                            <label>Kirjeldus</label>
+                            <label>Описание (маленький текст)</label>
                             <input type="text" id="stat1-desc" name="stat1-desc" value="Metallkonstruktsioonide turul">
                         </div>
                     </div>
                 </div>
 
                 <div class="card-group">
-                    <h4>Statistika 2</h4>
+                    <h4>Блок статистики 2</h4>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Number</label>
+                            <label>Число (большая цифра)</label>
                             <input type="text" id="stat2-number" name="stat2-number" value="500+">
                         </div>
                         <div class="form-group">
-                            <label>Pealkiri</label>
+                            <label>Заголовок</label>
                             <input type="text" id="stat2-title" name="stat2-title" value="Projektid">
                         </div>
                         <div class="form-group full-width">
-                            <label>Kirjeldus</label>
+                            <label>Описание (маленький текст)</label>
                             <input type="text" id="stat2-desc" name="stat2-desc" value="Edukalt lõpetatud">
                         </div>
                     </div>
                 </div>
 
                 <div class="card-group">
-                    <h4>Statistika 3</h4>
+                    <h4>Блок статистики 3</h4>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Number</label>
+                            <label>Число (большая цифра)</label>
                             <input type="text" id="stat3-number" name="stat3-number" value="100%">
                         </div>
                         <div class="form-group">
-                            <label>Pealkiri</label>
+                            <label>Заголовок</label>
                             <input type="text" id="stat3-title" name="stat3-title" value="Kvaliteet">
                         </div>
                         <div class="form-group full-width">
-                            <label>Kirjeldus</label>
+                            <label>Описание (маленький текст)</label>
                             <input type="text" id="stat3-desc" name="stat3-desc" value="Garantii kõigile töödele">
                         </div>
                     </div>
                 </div>
 
                 <div class="card-group">
-                    <h4>Statistika 4</h4>
+                    <h4>Блок статистики 4</h4>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Number</label>
+                            <label>Число (большая цифра)</label>
                             <input type="text" id="stat4-number" name="stat4-number" value="24/7">
                         </div>
                         <div class="form-group">
-                            <label>Pealkiri</label>
+                            <label>Заголовок</label>
                             <input type="text" id="stat4-title" name="stat4-title" value="Tugi">
                         </div>
                         <div class="form-group full-width">
-                            <label>Kirjeldus</label>
+                            <label>Описание (маленький текст)</label>
                             <input type="text" id="stat4-desc" name="stat4-desc" value="Kliendikonsultatsioonid">
                         </div>
                     </div>
@@ -429,63 +578,63 @@
 
             <!-- TEAM -->
             <div class="section">
-                <h2 class="section-title">Meeskond</h2>
+                <h2 class="section-title">О команде</h2>
                 <div class="form-grid">
                     <div class="form-group full-width">
-                        <label>Sektsiooni pealkiri</label>
+                        <label>Заголовок секции</label>
                         <input type="text" id="team-title" name="team-title" value="Professionaalne meeskond">
                     </div>
                     <div class="form-group full-width">
-                        <label>Alampealkiri</label>
+                        <label>Подзаголовок</label>
                         <input type="text" id="team-subtitle" name="team-subtitle" value="Parimad insenerid ja spetsialistid">
                     </div>
                     <div class="form-group full-width">
-                        <label>Tekst 1</label>
+                        <label>Текстовый блок 1</label>
                         <textarea id="team-text1" name="team-text1">Meie meeskond koosneb kõrgelt kvalifitseeritud inseneridest, projekteerijatega ja paigaldajatega, kellel on pikaajaline töökogemus.</textarea>
                     </div>
                     <div class="form-group full-width">
-                        <label>Tekst 2</label>
+                        <label>Текстовый блок 2</label>
                         <textarea id="team-text2" name="team-text2">Me tõstame pidevalt kvalifikatsiooni ja jälgime uusimaid tehnoloogiaid metallkonstruktsioonide vallas.</textarea>
                     </div>
                 </div>
 
                 <div class="card-group">
-                    <h4>Omadus 1</h4>
+                    <h4>Преимущество 1</h4>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Pealkiri</label>
+                            <label>Заголовок</label>
                             <input type="text" id="team-feat1-title" name="team-feat1-title" value="Esimesed regioonis">
                         </div>
                         <div class="form-group full-width">
-                            <label>Tekst</label>
+                            <label>Текст</label>
                             <textarea id="team-feat1-text" name="team-feat1-text">Sertifitseeritud spetsialistid rahvusvaheliste kvaliteedistandarditega</textarea>
                         </div>
                     </div>
                 </div>
 
                 <div class="card-group">
-                    <h4>Omadus 2</h4>
+                    <h4>Преимущество 2</h4>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Pealkiri</label>
+                            <label>Заголовок</label>
                             <input type="text" id="team-feat2-title" name="team-feat2-title" value="Kaasaegsed tehnoloogiad">
                         </div>
                         <div class="form-group full-width">
-                            <label>Tekst</label>
+                            <label>Текст</label>
                             <textarea id="team-feat2-text" name="team-feat2-text">Kasutame täiustatud projekteerimis- ja tootmismeetodeid</textarea>
                         </div>
                     </div>
                 </div>
 
                 <div class="card-group">
-                    <h4>Omadus 3</h4>
+                    <h4>Преимущество 3</h4>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Pealkiri</label>
+                            <label>Заголовок</label>
                             <input type="text" id="team-feat3-title" name="team-feat3-title" value="Individuaalne lähenemine">
                         </div>
                         <div class="form-group full-width">
-                            <label>Tekst</label>
+                            <label>Текст</label>
                             <textarea id="team-feat3-text" name="team-feat3-text">Iga projekt töötakse välja teie vajadusi arvestades</textarea>
                         </div>
                     </div>
@@ -494,51 +643,51 @@
 
             <!-- EQUIPMENT -->
             <div class="section">
-                <h2 class="section-title">Seadmed</h2>
+                <h2 class="section-title">Оборудование</h2>
                 <div class="form-grid">
                     <div class="form-group full-width">
-                        <label>Sektsiooni pealkiri</label>
+                        <label>Заголовок секции</label>
                         <input type="text" id="equipment-title" name="equipment-title" value="Kaasaegne seadmed">
                     </div>
                 </div>
 
                 <div class="card-group">
-                    <h4>Kaart 1</h4>
+                    <h4>Карточка 1</h4>
                     <div class="form-grid">
                         <div class="form-group full-width">
-                            <label>Pealkiri</label>
+                            <label>Заголовок</label>
                             <input type="text" id="equip1-title" name="equip1-title" value="Parim seadmed tootmiseks">
                         </div>
                         <div class="form-group full-width">
-                            <label>Kirjeldus</label>
+                            <label>Описание</label>
                             <textarea id="equip1-desc" name="equip1-desc">Kõik seadmed uuendatakse regulaarselt ja vastavad kaasaegsetele kvaliteedistandarditele</textarea>
                         </div>
                     </div>
                 </div>
 
                 <div class="card-group">
-                    <h4>Kaart 2</h4>
+                    <h4>Карточка 2</h4>
                     <div class="form-grid">
                         <div class="form-group full-width">
-                            <label>Pealkiri</label>
+                            <label>Заголовок</label>
                             <input type="text" id="equip2-title" name="equip2-title" value="Kvaliteedikontroll">
                         </div>
                         <div class="form-group full-width">
-                            <label>Kirjeldus</label>
+                            <label>Описание</label>
                             <textarea id="equip2-desc" name="equip2-desc">Mitmeastmeline kontrollisüsteem kõigil tootmise ja paigaldamise etappidel</textarea>
                         </div>
                     </div>
                 </div>
 
                 <div class="card-group">
-                    <h4>Kaart 3</h4>
+                    <h4>Карточка 3</h4>
                     <div class="form-grid">
                         <div class="form-group full-width">
-                            <label>Pealkiri</label>
+                            <label>Заголовок</label>
                             <input type="text" id="equip3-title" name="equip3-title" value="Täielik tootmistsükkel">
                         </div>
                         <div class="form-group full-width">
-                            <label>Kirjeldus</label>
+                            <label>Описание</label>
                             <textarea id="equip3-desc" name="equip3-desc">Projekteerimisest kuni paigaldamiseni - kõik teeme oma võimsustel</textarea>
                         </div>
                     </div>
@@ -547,14 +696,14 @@
 
             <!-- CONTACT -->
             <div class="section">
-                <h2 class="section-title">Kontakt</h2>
+                <h2 class="section-title">Контакты</h2>
                 <div class="form-grid">
                     <div class="form-group full-width">
-                        <label>Sektsiooni pealkiri</label>
+                        <label>Заголовок секции</label>
                         <input type="text" id="contact-title" name="contact-title" value="Võtke meiega ühendust">
                     </div>
                     <div class="form-group">
-                        <label>Telefon</label>
+                        <label>Телефон</label>
                         <input type="text" id="contact-phone" name="contact-phone" value="+372 5XXX XXXX">
                     </div>
                     <div class="form-group">
@@ -562,11 +711,24 @@
                         <input type="email" id="contact-email" name="contact-email" value="info@manufarm.ee">
                     </div>
                     <div class="form-group full-width">
-                        <label>Tugitekst</label>
+                        <label>Текст поддержки</label>
                         <textarea id="contact-support" name="contact-support">Tasuta konsultatsioonid ja klienditugi. Vastame kõigile teie küsimustele ja aitame realiseerida mis tahes keerukusega projekti.</textarea>
                     </div>
                 </div>
             </div>
+
+            <!-- FORM BUTTON -->
+            <div class="section">
+                <h2 class="section-title">Текст кнопки в форме</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Текст кнопки отправки формы</label>
+                        <input type="text" id="form-submit-btn" name="form-submit-btn" value="Saada päring">
+                        <span class="button-preview">Предпросмотр: Saada päring</span>
+                    </div>
+                </div>
+            </div>
+
 
             <!-- FOOTER -->
             <div class="section">
