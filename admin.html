@@ -821,5 +821,33 @@
         }
     </script>
 
+// --- LOGIN SYSTEM ---
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const entered = document.getElementById("passwordInput").value.trim();
+    const correctPassword = "q1w2e3r4";
+
+    if (entered === correctPassword) {
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("adminContainer").classList.add("show");
+    } else {
+        document.getElementById("loginError").classList.add("show");
+        setTimeout(() => {
+            document.getElementById("loginError").classList.remove("show");
+        }, 2000);
+    }
+});
+
+function logout() {
+    document.getElementById("adminContainer").classList.remove("show");
+    document.getElementById("loginScreen").style.display = "flex";
+    document.getElementById("passwordInput").value = "";
+}
+
+// Auto-load saved data
+window.addEventListener("load", loadContent);
+</script>
+
 </body>
 </html>
